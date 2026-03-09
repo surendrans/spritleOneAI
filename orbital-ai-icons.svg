@@ -1,0 +1,354 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 540" width="600" height="540">
+  <defs>
+    <!-- Background radial gradient — dark center fading to pure black -->
+    <radialGradient id="bgGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#1a1d2e"/>
+      <stop offset="65%" stop-color="#0a0a0f"/>
+      <stop offset="100%" stop-color="#000000"/>
+    </radialGradient>
+
+    <!-- Vignette overlay: black corners fading inward -->
+    <radialGradient id="vignette" cx="50%" cy="50%" r="50%">
+      <stop offset="50%" stop-color="black" stop-opacity="0"/>
+      <stop offset="100%" stop-color="black" stop-opacity="1"/>
+    </radialGradient>
+
+    <!-- Dot grid mask -->
+    <radialGradient id="dotMask" cx="50%" cy="50%" r="45%">
+      <stop offset="0%" stop-color="white" stop-opacity="0.18"/>
+      <stop offset="60%" stop-color="white" stop-opacity="0.07"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Subtle orbit ring gradient -->
+    <radialGradient id="orbitRing" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="transparent"/>
+      <stop offset="85%" stop-color="#3a4060" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="transparent"/>
+    </radialGradient>
+
+    <!-- Icon glow filters -->
+    <filter id="glow-blue" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="glow-coral" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="5" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="glow-white" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="gem-glow" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="6" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+
+    <!-- Clip for icons -->
+    <clipPath id="icon-clip">
+      <rect width="56" height="56" rx="12"/>
+    </clipPath>
+
+    <!-- CSS Animations -->
+    <style>
+      /* Staggered fade animations — each icon pulses active in sequence */
+      @keyframes pulse-active {
+        0%   { opacity: 0.22; filter: saturate(0.2) brightness(0.5); }
+        15%  { opacity: 1;    filter: saturate(1)   brightness(1.1); }
+        45%  { opacity: 1;    filter: saturate(1)   brightness(1.1); }
+        65%  { opacity: 0.22; filter: saturate(0.2) brightness(0.5); }
+        100% { opacity: 0.22; filter: saturate(0.2) brightness(0.5); }
+      }
+
+      @keyframes gem-pulse {
+        0%   { transform: scale(1) rotate(0deg); }
+        25%  { transform: scale(1.08) rotate(4deg); }
+        50%  { transform: scale(1) rotate(0deg); }
+        75%  { transform: scale(1.05) rotate(-3deg); }
+        100% { transform: scale(1) rotate(0deg); }
+      }
+
+      @keyframes orbit-ring-spin {
+        from { transform: rotate(0deg); }
+        to   { transform: rotate(360deg); }
+      }
+
+      @keyframes dot-breathe {
+        0%, 100% { opacity: 1; }
+        50%       { opacity: 0.65; }
+      }
+
+      /* Assign staggered delays — 8 icons, total cycle ~8s per icon */
+      .icon-gemini   { animation: pulse-active 8s ease-in-out 0s   infinite; }
+      .icon-vscode   { animation: pulse-active 8s ease-in-out 1s   infinite; }
+      .icon-openai   { animation: pulse-active 8s ease-in-out 2s   infinite; }
+      .icon-claude   { animation: pulse-active 8s ease-in-out 3s   infinite; }
+      .icon-robot    { animation: pulse-active 8s ease-in-out 4s   infinite; }
+      .icon-copilot  { animation: pulse-active 8s ease-in-out 5s   infinite; }
+      .icon-warp     { animation: pulse-active 8s ease-in-out 6s   infinite; }
+
+      /* All start dimmed */
+      .icon-gemini, .icon-vscode, .icon-openai,
+      .icon-claude, .icon-robot, .icon-copilot, .icon-warp {
+        opacity: 0.22;
+        filter: saturate(0.2) brightness(0.5);
+      }
+
+      .gem-group {
+        transform-origin: 300px 270px;
+        animation: gem-pulse 4s ease-in-out infinite;
+      }
+
+      .orbit-dashes {
+        transform-origin: 300px 270px;
+        animation: orbit-ring-spin 18s linear infinite;
+      }
+
+      .dot-grid {
+        animation: dot-breathe 5s ease-in-out infinite;
+      }
+    </style>
+  </defs>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!--  BACKGROUND                                 -->
+  <!-- ═══════════════════════════════════════════ -->
+  <rect width="600" height="540" fill="url(#bgGlow)"/>
+  <!-- Black vignette — corners fade to pure black for seamless dark embedding -->
+  <rect width="600" height="540" fill="url(#vignette)"/>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!--  DOT GRID  (centered radial pattern)        -->
+  <!-- ═══════════════════════════════════════════ -->
+  <g class="dot-grid">
+    <!-- Generate dot grid using a pattern tile, masked radially -->
+    <defs>
+      <pattern id="dots" x="0" y="0" width="18" height="18" patternUnits="userSpaceOnUse">
+        <rect x="6" y="6" width="4" height="4" rx="1" fill="#4a5580" opacity="1"/>
+      </pattern>
+      <mask id="radialDotMask">
+        <rect width="600" height="540" fill="url(#dotMask)"/>
+      </mask>
+    </defs>
+    <rect width="600" height="540" fill="url(#dots)" mask="url(#radialDotMask)"/>
+  </g>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!--  ORBIT RINGS                                -->
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- Static outer ring -->
+  <circle cx="300" cy="270" r="200" fill="none" stroke="#2a3050" stroke-width="1" stroke-opacity="0.5"/>
+  <!-- Static inner ring -->
+  <circle cx="300" cy="270" r="120" fill="none" stroke="#2a3050" stroke-width="0.75" stroke-opacity="0.35"/>
+
+  <!-- Rotating dashed accent ring -->
+  <g class="orbit-dashes">
+    <circle cx="300" cy="270" r="200" fill="none" stroke="#4a6090" stroke-width="1.5"
+      stroke-dasharray="6 28" stroke-opacity="0.55"/>
+  </g>
+
+  <!-- Subtle center glow -->
+  <radialGradient id="centerGlow" cx="50%" cy="50%" r="50%">
+    <stop offset="0%" stop-color="#5060a0" stop-opacity="0.18"/>
+    <stop offset="100%" stop-color="transparent"/>
+  </radialGradient>
+  <ellipse cx="300" cy="270" rx="110" ry="110" fill="url(#centerGlow)"/>
+
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!--  ICON 1 — GOOGLE GEMINI  (top center ~300,82) -->
+  <!-- ═══════════════════════════════════════════ -->
+  <g class="icon-gemini" transform="translate(272, 54)">
+    <!-- Dark rounded bg -->
+    <rect x="0" y="0" width="56" height="56" rx="14" fill="#1c1f2e" stroke="#2e3250" stroke-width="1"/>
+    <!-- Gemini 4-pointed star: colorful quadrants -->
+    <!-- Blue top -->
+    <path d="M28,10 C28,10 32,19 28,28 C24,19 28,10 28,10Z" fill="#4285f4"/>
+    <!-- Red right -->
+    <path d="M46,28 C46,28 37,24 28,28 C37,32 46,28 46,28Z" fill="#ea4335"/>
+    <!-- Yellow bottom -->
+    <path d="M28,46 C28,46 24,37 28,28 C32,37 28,46 28,46Z" fill="#fbbc05"/>
+    <!-- Green left -->
+    <path d="M10,28 C10,28 19,32 28,28 C19,24 10,28 10,28Z" fill="#34a853"/>
+    <!-- Thin inner cross highlight -->
+    <path d="M28,16 C28,16 30,22 28,28 C26,22 28,16 28,16Z" fill="white" opacity="0.4"/>
+  </g>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!--  ICON 2 — VS CODE  (left-center upper ~108, 158) -->
+  <!-- ═══════════════════════════════════════════ -->
+  <g class="icon-vscode" transform="translate(80, 130)">
+    <rect x="0" y="0" width="56" height="56" rx="14" fill="#1c1f2e" stroke="#2e3250" stroke-width="1"/>
+    <!-- VS Code logo — angular blue shapes -->
+    <g transform="translate(8,8)">
+      <!-- Outer shield shape -->
+      <path d="M30,2 L38,8 L38,32 L30,38 L14,26 L6,30 L6,10 L14,14 Z" fill="#007acc" opacity="0.9"/>
+      <!-- White cutout V shape -->
+      <path d="M30,10 L22,20 L30,30 L38,24 L38,16 Z" fill="#1c1f2e"/>
+      <!-- Inner blue fill -->
+      <path d="M14,14 L22,20 L14,26 Z" fill="#007acc"/>
+      <!-- Bright highlight line -->
+      <path d="M30,2 L38,8 L30,10 Z" fill="#5bc4f5"/>
+    </g>
+  </g>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!--  ICON 3 — OPENAI  (right-center upper ~412, 158) -->
+  <!-- ═══════════════════════════════════════════ -->
+  <g class="icon-openai" transform="translate(412, 130)">
+    <rect x="0" y="0" width="56" height="56" rx="14" fill="#1c1f2e" stroke="#2e3250" stroke-width="1"/>
+    <!-- OpenAI rosette/flower — 6 overlapping arcs -->
+    <g transform="translate(28,28)">
+      <g opacity="0.9">
+        <!-- Petals via rotated ellipses -->
+        <ellipse cx="0" cy="-8" rx="5.5" ry="11" fill="none" stroke="#e8e8e8" stroke-width="2.2" transform="rotate(0)"/>
+        <ellipse cx="0" cy="-8" rx="5.5" ry="11" fill="none" stroke="#e8e8e8" stroke-width="2.2" transform="rotate(60)"/>
+        <ellipse cx="0" cy="-8" rx="5.5" ry="11" fill="none" stroke="#e8e8e8" stroke-width="2.2" transform="rotate(120)"/>
+        <ellipse cx="0" cy="-8" rx="5.5" ry="11" fill="none" stroke="#e8e8e8" stroke-width="2.2" transform="rotate(180)"/>
+        <ellipse cx="0" cy="-8" rx="5.5" ry="11" fill="none" stroke="#e8e8e8" stroke-width="2.2" transform="rotate(240)"/>
+        <ellipse cx="0" cy="-8" rx="5.5" ry="11" fill="none" stroke="#e8e8e8" stroke-width="2.2" transform="rotate(300)"/>
+      </g>
+    </g>
+  </g>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!--  ICON 4 — GEM / DIAMOND CENTER  (300, 270) -->
+  <!-- ═══════════════════════════════════════════ -->
+  <g class="gem-group" filter="url(#gem-glow)">
+    <g transform="translate(272, 242)">
+      <rect x="0" y="0" width="56" height="56" rx="14" fill="#16192a" stroke="#3a4060" stroke-width="1.5"/>
+      <!-- Low-poly gem shape -->
+      <g transform="translate(28,28)">
+        <!-- Top facets -->
+        <polygon points="0,-18 14,-6 0,-2" fill="#c8d8f0" opacity="0.95"/>
+        <polygon points="0,-18 -14,-6 0,-2" fill="#a0bce0" opacity="0.95"/>
+        <!-- Middle band -->
+        <polygon points="14,-6 18,4 0,-2" fill="#8aaed8" opacity="0.9"/>
+        <polygon points="-14,-6 -18,4 0,-2" fill="#b8cce8" opacity="0.9"/>
+        <polygon points="18,4 0,-2 14,12" fill="#d8e8f8" opacity="0.85"/>
+        <polygon points="-18,4 0,-2 -14,12" fill="#c0d4ec" opacity="0.85"/>
+        <!-- Bottom facets -->
+        <polygon points="14,12 0,-2 0,20" fill="#a8c4e0" opacity="0.9"/>
+        <polygon points="-14,12 0,-2 0,20" fill="#90b0d4" opacity="0.9"/>
+        <!-- Top crown edge highlight -->
+        <polyline points="-14,-6 0,-18 14,-6" fill="none" stroke="white" stroke-width="0.8" opacity="0.7"/>
+        <!-- Center shine -->
+        <polygon points="0,-18 6,-12 0,-8 -6,-12" fill="white" opacity="0.55"/>
+      </g>
+    </g>
+  </g>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!--  ICON 5 — ANTHROPIC CLAUDE  (left lower ~130, 320) -->
+  <!-- ═══════════════════════════════════════════ -->
+  <g class="icon-claude" transform="translate(102, 292)" filter="url(#glow-coral)">
+    <rect x="0" y="0" width="56" height="56" rx="14" fill="#1c1f2e" stroke="#2e3250" stroke-width="1"/>
+    <!-- Claude asterisk/starburst — 8 rays coral/salmon -->
+    <g transform="translate(28,28)">
+      <!-- 8 rounded rays at 45° increments -->
+      <rect x="-3.5" y="-18" width="7" height="36" rx="3.5" fill="#da7756" transform="rotate(0)"/>
+      <rect x="-3.5" y="-18" width="7" height="36" rx="3.5" fill="#da7756" transform="rotate(45)"/>
+      <rect x="-3.5" y="-18" width="7" height="36" rx="3.5" fill="#da7756" transform="rotate(90)"/>
+      <rect x="-3.5" y="-18" width="7" height="36" rx="3.5" fill="#da7756" transform="rotate(135)"/>
+      <!-- Center dot -->
+      <circle cx="0" cy="0" r="5" fill="#e89070"/>
+    </g>
+  </g>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!--  ICON 6 — ROBOT / AI ASSISTANT  (bottom left ~130, 390) -->
+  <!-- ═══════════════════════════════════════════ -->
+  <g class="icon-robot" transform="translate(108, 380)">
+    <rect x="0" y="0" width="56" height="56" rx="14" fill="#1c1f2e" stroke="#2e3250" stroke-width="1"/>
+    <g transform="translate(28,28)">
+      <!-- Antenna -->
+      <line x1="0" y1="-20" x2="0" y2="-14" stroke="#6be0c0" stroke-width="2" stroke-linecap="round"/>
+      <circle cx="0" cy="-22" r="3" fill="#6be0c0"/>
+      <!-- Head -->
+      <rect x="-14" y="-14" width="28" height="26" rx="6" fill="#2a3a50" stroke="#4a7090" stroke-width="1.5"/>
+      <!-- Eyes -->
+      <rect x="-9" y="-8" width="7" height="7" rx="2" fill="#40c0e0"/>
+      <rect x="2" y="-8" width="7" height="7" rx="2" fill="#40c0e0"/>
+      <!-- Eye shine -->
+      <rect x="-8" y="-7" width="2" height="2" rx="1" fill="white" opacity="0.7"/>
+      <rect x="3" y="-7" width="2" height="2" rx="1" fill="white" opacity="0.7"/>
+      <!-- Mouth bar -->
+      <rect x="-7" y="4" width="14" height="3" rx="1.5" fill="#4a7090"/>
+      <!-- Ears/sides -->
+      <rect x="-17" y="-6" width="4" height="8" rx="2" fill="#2a3a50" stroke="#4a7090" stroke-width="1"/>
+      <rect x="13" y="-6" width="4" height="8" rx="2" fill="#2a3a50" stroke="#4a7090" stroke-width="1"/>
+    </g>
+  </g>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!--  ICON 7 — COPILOT / GLASSES CHARACTER  (bottom right ~376, 390) -->
+  <!-- ═══════════════════════════════════════════ -->
+  <g class="icon-copilot" transform="translate(376, 380)">
+    <rect x="0" y="0" width="56" height="56" rx="14" fill="#1c1f2e" stroke="#2e3250" stroke-width="1"/>
+    <g transform="translate(28,28)">
+      <!-- Body/head silhouette -->
+      <ellipse cx="0" cy="-4" rx="16" ry="18" fill="#1a2540"/>
+      <ellipse cx="0" cy="-4" rx="15" ry="17" fill="#222e50"/>
+      <!-- Goggle eyes — left -->
+      <circle cx="-7" cy="-5" r="7" fill="#181e35" stroke="#4060c0" stroke-width="2"/>
+      <circle cx="-7" cy="-5" r="4" fill="#2040a0" opacity="0.7"/>
+      <circle cx="-5" cy="-7" r="1.5" fill="white" opacity="0.5"/>
+      <!-- Goggle eyes — right -->
+      <circle cx="7" cy="-5" r="7" fill="#181e35" stroke="#4060c0" stroke-width="2"/>
+      <circle cx="7" cy="-5" r="4" fill="#2040a0" opacity="0.7"/>
+      <circle cx="9" cy="-7" r="1.5" fill="white" opacity="0.5"/>
+      <!-- Bridge between goggles -->
+      <rect x="-1" y="-7" width="2" height="4" rx="1" fill="#4060c0"/>
+      <!-- Smile -->
+      <path d="M-6,6 Q0,11 6,6" fill="none" stroke="#4060c0" stroke-width="2" stroke-linecap="round"/>
+      <!-- Head top bump -->
+      <ellipse cx="0" cy="-19" rx="6" ry="4" fill="#222e50"/>
+    </g>
+  </g>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!--  ICON 8 — WARP TERMINAL  (bottom center ~272, 432) -->
+  <!-- ═══════════════════════════════════════════ -->
+  <g class="icon-warp" transform="translate(272, 432)">
+    <rect x="0" y="0" width="56" height="56" rx="14" fill="#0f1118" stroke="#2e3250" stroke-width="1"/>
+    <!-- Warp: dark rounded rect with diagonal slash accent -->
+    <rect x="8" y="8" width="40" height="40" rx="8" fill="#181c28" stroke="#303550" stroke-width="1"/>
+    <!-- Diagonal slash — Warp-style accent -->
+    <line x1="16" y1="40" x2="40" y2="16" stroke="#e040a0" stroke-width="3" stroke-linecap="round"/>
+    <!-- Terminal cursor block -->
+    <rect x="10" y="34" width="8" height="10" rx="1.5" fill="#e040a0" opacity="0.85"/>
+    <!-- Faint prompt lines -->
+    <line x1="10" y1="22" x2="25" y2="22" stroke="#404870" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="10" y1="28" x2="20" y2="28" stroke="#404870" stroke-width="1.5" stroke-linecap="round"/>
+  </g>
+
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!--  CONNECTION LINES (subtle)                  -->
+  <!-- ═══════════════════════════════════════════ -->
+  <g opacity="0.18" stroke="#4a6080" stroke-width="0.75" stroke-dasharray="3 8">
+    <!-- Lines from icons to center -->
+    <line x1="300" y1="82" x2="300" y2="242"/>   <!-- Gemini to center -->
+    <line x1="136" y1="158" x2="272" y2="255"/>  <!-- VSCode to center -->
+    <line x1="440" y1="158" x2="328" y2="255"/>  <!-- OpenAI to center -->
+    <line x1="158" y1="320" x2="272" y2="270"/>  <!-- Claude to center -->
+    <line x1="164" y1="408" x2="272" y2="300"/>  <!-- Robot to center -->
+    <line x1="432" y1="408" x2="328" y2="300"/>  <!-- Copilot to center -->
+    <line x1="300" y1="432" x2="300" y2="298"/>  <!-- Warp to center -->
+  </g>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!--  LABEL TEXT (subtle, below icons)           -->
+  <!-- ═══════════════════════════════════════════ -->
+  <g font-family="'SF Mono', 'Fira Code', monospace" font-size="9" fill="#485878" text-anchor="middle" letter-spacing="0.5">
+    <text x="300" y="122">Gemini</text>
+    <text x="108" y="200">VS Code</text>
+    <text x="440" y="200">OpenAI</text>
+    <text x="130" y="360">Claude</text>
+    <text x="136" y="454">Robot</text>
+    <text x="404" y="454">Copilot</text>
+    <text x="300" y="504">Warp</text>
+  </g>
+
+</svg>
