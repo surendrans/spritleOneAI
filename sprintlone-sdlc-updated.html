@@ -429,12 +429,28 @@
     margin-bottom: 32px;
     opacity: 0.45;
   }
-  .pipeline-svg {
+  .pipeline-scroll-wrap {
     width: 100%;
-    height: auto;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin-top: 48px;
+    scrollbar-width: thin;
+    scrollbar-color: #141414 transparent;
+  }
+  .pipeline-scroll-wrap::-webkit-scrollbar { height: 3px; }
+  .pipeline-scroll-wrap::-webkit-scrollbar-track { background: transparent; }
+  .pipeline-scroll-wrap::-webkit-scrollbar-thumb { background: #141414; border-radius: 2px; }
+  .pipeline-svg {
     display: block;
+    height: auto;
+    width: 100%;
     max-width: 1100px;
-    margin: 48px auto 0;
+    margin: 0 auto;
+  }
+  @media(max-width: 900px) {
+    .pipeline-section { padding: 40px 20px 48px; }
+    .pipeline-svg { width: 900px; min-width: 900px; max-width: none; margin: 0; }
+    .intro-title { font-size: 22px !important; }
   }
 
   /* ── INTRO SECTION ── */
@@ -554,6 +570,7 @@
     <h2 class="intro-title">SpritleOneAI — The AI-powered engine for <span class="intro-outline">modern software development.</span></h2>
     <p class="intro-body">SpritleOneAI is our AI-driven agentic development platform, built by Spritle to help our customers build modern software faster and better. It combines AI agents with human expertise in the loop to ensure secure, reliable, and high-quality software development.</p>
   </div>
+  <div class="pipeline-scroll-wrap">
   <svg class="pipeline-svg" viewBox="0 0 1100 400" xmlns="http://www.w3.org/2000/svg" font-family="JetBrains Mono, monospace">
 
   <defs>
@@ -894,6 +911,7 @@
   <text x="231" y="362" fill="#2a5070" font-size="6" letter-spacing="1">OUTPUT ARTIFACT LABEL ON ARROWS</text>
 
 </svg>
+  </div>
 </section>
 
 <!-- ══════════════════════════════════════
@@ -1291,9 +1309,8 @@
     <p>AI proposes architecture, scaffolds components, and writes implementation. Designers own UX decisions. Developers direct AI agents to implement features and review every diff before merge.</p>
     <div class="human-tag">Human: Direct AI &amp; Own Architecture</div>
   </div>
-  <div class="phase-diagram">
-   
-    <img src="orbital-ai-icons.svg" style="width:80%;height:80%" />
+  <div class="phase-diagram"> 
+    <img src="orbital-ai-icons.svg" style=""/>
   </div>
 </section>
 
